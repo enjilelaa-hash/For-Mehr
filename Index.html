@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>برای مهرنوش 💓🎀</title>
+
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+  background:#0b0f1a;
+  color:white;
+  text-align:center;
+  overflow:hidden;
+}
+
+/* ستاره‌ها */
+.stars{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:transparent;
+}
+.stars::after{
+  content:"";
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  box-shadow: 20px 30px white, 100px 200px white, 300px 400px white, 500px 100px white, 700px 300px white, 900px 500px white;
+  animation: twinkle 2s infinite alternate;
+}
+@keyframes twinkle{
+  from{opacity:0.3;}
+  to{opacity:1;}
+}
+
+/* ماه */
+.moon{
+  position:absolute;
+  top:50px;
+  right:50px;
+  width:80px;
+  height:80px;
+  background:#fff;
+  border-radius:50%;
+  box-shadow:0 0 30px #fff;
+}
+
+/* کانتینر */
+.container{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:90%;
+}
+
+/* دکمه */
+button{
+  padding:12px 20px;
+  margin:10px;
+  font-size:18px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+.yes{background:#ff4d6d;color:white;}
+.no{background:#444;color:white;position:relative;}
+
+/* شمع */
+.candle{
+  width:20px;
+  height:60px;
+  background:#ffd;
+  margin:0 auto 20px;
+  position:relative;
+}
+.flame{
+  width:15px;
+  height:15px;
+  background:orange;
+  border-radius:50%;
+  position:absolute;
+  top:-10px;
+  left:2px;
+  animation:flicker .2s infinite;
+}
+@keyframes flicker{
+  0%{transform:scale(1);}
+  50%{transform:scale(1.2);}
+  100%{transform:scale(1);}
+}
+
+.hidden{display:none;}
+
+.option{
+  display:inline-block;
+  padding:10px 15px;
+  border:1px solid white;
+  margin:5px;
+  border-radius:10px;
+  cursor:pointer;
+}
+.selected{background:#ff4d6d;}
+
+</style>
+</head>
+
+<body>
+
+<div class="stars"></div>
+<div class="moon"></div>
+
+<!-- مرحله 1 -->
+<div class="container" id="step1">
+  <div class="candle"><div class="flame"></div></div>
+  <h2>مهرنوش من 💓🎀<br>بیا باهم یه شب خاص رو بسازیم</h2>
+  <button class="yes" onclick="next(2)">YES ❤️</button>
+  <button class="no" onmouseover="moveNo(this)">NO 😏</button>
+</div>
+
+<!-- مرحله 2 لباس -->
+<div class="container hidden" id="step2">
+  <h2>چی بپوشیم؟ 👗</h2>
+  <div class="option" onclick="select(this,'dress','مشکی شیک')">مشکی شیک</div>
+  <div class="option" onclick="select(this,'dress','سفید ملایم')">سفید ملایم</div>
+  <div class="option" onclick="select(this,'dress','قرمز جذاب')">قرمز جذاب</div>
+  <br>
+  <button class="yes" onclick="next(3)">ادامه ❤️</button>
+</div>
+
+<!-- مرحله 3 زمان -->
+<div class="container hidden" id="step3">
+  <h2>چه ساعتی شام؟ 🍽️</h2>
+  <div class="option" onclick="select(this,'time','20:00 آلمان / 21:30 ایران')">۲۰:۰۰ 🇩🇪 / ۲۱:۳۰ 🇮🇷</div>
+  <div class="option" onclick="select(this,'time','21:00 آلمان / 22:30 ایران')">۲۱:۰۰ 🇩🇪 / ۲۲:۳۰ 🇮🇷</div>
+  <br>
+  <button class="yes" onclick="next(4)">ادامه ❤️</button>
+</div>
+
+<!-- مرحله 4 پیام -->
+<div class="container hidden" id="step4">
+  <h2>
+    میدونی چی این شبو خاص می‌کنه؟<br><br>
+    اینکه با تو باشم... حتی اگه کیلومترها فاصله باشه ❤️<br><br>
+    مهرنوش من 💓🎀 تو قشنگ‌ترین اتفاق دنیامی
+  </h2>
+  <button class="yes" onclick="finish()">تایید نهایی ❤️</button>
+</div>
+
+<!-- مرحله آخر -->
+<div class="container hidden" id="step5">
+  <h2>تموم شد 😍</h2>
+  <p id="result"></p>
+  <button onclick="download()">دانلود جواب‌ها 📥</button>
+</div>
+
+<script>
+let answers = {};
+
+function next(n){
+  document.querySelectorAll(".container").forEach(e=>e.classList.add("hidden"));
+  document.getElementById("step"+n).classList.remove("hidden");
+}
+
+function select(el,key,value){
+  document.querySelectorAll("#"+el.parentNode.id+" .option").forEach(o=>o.classList.remove("selected"));
+  el.classList.add("selected");
+  answers[key]=value;
+}
+
+function moveNo(btn){
+  btn.style.position="absolute";
+  btn.style.top=Math.random()*80+"%";
+  btn.style.left=Math.random()*80+"%";
+}
+
+function finish(){
+  next(5);
+  let text = "لباس: "+(answers.dress||"—")+"<br>زمان: "+(answers.time||"—");
+  document.getElementById("result").innerHTML=text;
+}
+
+function download(){
+  let data = "Dress: "+answers.dress+"\nTime: "+answers.time;
+  let blob = new Blob([data], {type:"text/plain"});
+  let a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "date_result.txt";
+  a.click();
+}
+</script>
+
+</body>
+</html>
